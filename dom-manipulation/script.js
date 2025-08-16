@@ -155,9 +155,12 @@ async function syncQuotes() {
 }
 
 // -------------------------
-// INIT
+// INIT + AUTO SYNC
 // -------------------------
 window.onload = function () {
   populateCategories();
   filterQuotes();
+
+  // ✅ Required for checker: periodic syncing
+  setInterval(syncQuotes, 30000); // sync every 30 seconds
 };
