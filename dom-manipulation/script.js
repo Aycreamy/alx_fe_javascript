@@ -42,9 +42,9 @@ async function postQuoteToServer(quote) {
 }
 
 // -------------------------
-// SYNC WITH SERVER
+// SYNC QUOTES (renamed)
 // -------------------------
-async function syncWithServer() {
+async function syncQuotes() {
   try {
     let serverQuotes = await fetchQuotesFromServer();
     let conflicts = [];
@@ -121,7 +121,7 @@ function showNotification(message) {
 // -------------------------
 // PERIODIC SYNC
 // -------------------------
-setInterval(syncWithServer, 15000);
+setInterval(syncQuotes, 15000);
 
 // -------------------------
 // ON PAGE LOAD
@@ -129,4 +129,4 @@ setInterval(syncWithServer, 15000);
 createAddQuoteForm();
 populateCategories();
 filterQuotes();
-syncWithServer(); // initial sync
+syncQuotes(); // initial sync
