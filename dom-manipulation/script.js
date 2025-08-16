@@ -4,9 +4,22 @@
 let quotes = JSON.parse(localStorage.getItem("quotes")) || [];
 const SERVER_URL = "https://jsonplaceholder.typicode.com/posts"; // mock API
 
-// Save to localStorage
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
+}
+
+// -------------------------
+// FETCH QUOTES FROM SERVER
+// -------------------------
+async function fetchQuotesFromServer() {
+  let response = await fetch(SERVER_URL);
+  let serverData = await response.json();
+
+  // Simulate server quotes structure (just use first 5 for demo)
+  return serverData.slice(0, 5).map(post => ({
+    text: post.title,
+    category: "Server"
+  }));
 }
 
 // -------------------------
@@ -14,29 +27,18 @@ function saveQuotes() {
 // -------------------------
 async function syncWithServer() {
   try {
-    let response = await fetch(SERVER_URL);
-    let serverData = await response.json();
-
-    // Simulate server quotes structure (use only first 5 for demo)
-    let serverQuotes = serverData.slice(0, 5).map(post => ({
-      text: post.title,
-      category: "Server"
-    }));
-
+    let serverQuotes = await fetchQuotesFromServer();
     let conflicts = [];
 
-    // Merge server quotes with local
     serverQuotes.forEach(serverQuote => {
       let localMatch = quotes.find(q => q.text === serverQuote.text);
 
       if (!localMatch) {
-        // Add new server quote to local
+        // New server quote → add it
         quotes.push(serverQuote);
       } else if (JSON.stringify(localMatch) !== JSON.stringify(serverQuote)) {
-        // Conflict: server vs local → server wins
+        // Conflict → server wins
         conflicts.push({ local: localMatch, server: serverQuote });
-
-        // Replace local with server’s version
         Object.assign(localMatch, serverQuote);
       }
     });
@@ -57,7 +59,7 @@ async function syncWithServer() {
 }
 
 // -------------------------
-// NOTIFICATION SYSTEM
+// NOTIFICATION BAR
 // -------------------------
 function showNotification(message) {
   let notificationBar = document.getElementById("notificationBar");
@@ -82,15 +84,21 @@ function showNotification(message) {
 }
 
 // -------------------------
-// PERIODIC SYNC (every 15s)
+// PERIODIC SYNC
 // -------------------------
 setInterval(syncWithServer, 15000);
 
 // -------------------------
-// EXISTING FUNCTIONS (filter, add, etc.)
+// EXISTING FUNCTIONS
 // -------------------------
-// keep all your previous functions: 
-// populateCategories(), filterQuotes(), addQuote(), exportToJsonFile(), importFromJsonFile(), etc.
+// Keep your previous functions here: 
+// populateCategories(), filterQuotes(), addQuote(), createAddQuoteForm(),
+// exportToJsonFile(), importFromJsonFile()
 
-// Call sync once on load
-syncWithServer();
+// -------------------------
+// ON PAGE LOAD
+// -------------------------
+createAddQuoteForm();
+populateCategories();
+filterQuotes();
+syncWithServer(); // initial sync
