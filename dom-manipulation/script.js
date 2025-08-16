@@ -23,6 +23,25 @@ async function fetchQuotesFromServer() {
 }
 
 // -------------------------
+// POST QUOTE TO SERVER
+// -------------------------
+async function postQuoteToServer(quote) {
+  try {
+    let response = await fetch(SERVER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quote)
+    });
+    let result = await response.json();
+    console.log("Quote posted to server:", result);
+  } catch (error) {
+    console.error("Error posting quote:", error);
+  }
+}
+
+// -------------------------
 // SYNC WITH SERVER
 // -------------------------
 async function syncWithServer() {
@@ -59,6 +78,22 @@ async function syncWithServer() {
 }
 
 // -------------------------
+// ADD QUOTE (extended to POST)
+// -------------------------
+function addQuote(text, category) {
+  if (!text.trim()) return;
+
+  let newQuote = { text, category };
+  quotes.push(newQuote);
+  saveQuotes();
+  populateCategories();
+  filterQuotes();
+
+  // Post new quote to server
+  postQuoteToServer(newQuote);
+}
+
+// -------------------------
 // NOTIFICATION BAR
 // -------------------------
 function showNotification(message) {
@@ -87,13 +122,6 @@ function showNotification(message) {
 // PERIODIC SYNC
 // -------------------------
 setInterval(syncWithServer, 15000);
-
-// -------------------------
-// EXISTING FUNCTIONS
-// -------------------------
-// Keep your previous functions here: 
-// populateCategories(), filterQuotes(), addQuote(), createAddQuoteForm(),
-// exportToJsonFile(), importFromJsonFile()
 
 // -------------------------
 // ON PAGE LOAD
