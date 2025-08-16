@@ -7,32 +7,25 @@ let quotes = [
 
 // Step 2: Function to show a random quote
 function showRandomQuote() {
-  // Pick a random number (index) between 0 and quotes.length - 1
   let randomIndex = Math.floor(Math.random() * quotes.length);
-
-  // Get that random quote
   let randomQuote = quotes[randomIndex];
 
-  // Display it inside the "quoteDisplay" div
   let quoteDiv = document.getElementById("quoteDisplay");
   quoteDiv.innerHTML = `"${randomQuote.text}" <br><em>(${randomQuote.category})</em>`;
 }
 
-// Step 3: Hook the "Show New Quote" button to this function
+// Hook the "Show New Quote" button to this function
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
-// Step 4: Function to add a new quote
+// Step 3: Function to add a new quote
 function addQuote() {
-  // Get the input values
   let newQuoteText = document.getElementById("newQuoteText").value.trim();
   let newQuoteCategory = document.getElementById("newQuoteCategory").value.trim();
 
-  // Check if input is not empty
   if (newQuoteText && newQuoteCategory) {
-    // Add new quote object into the array
     quotes.push({ text: newQuoteText, category: newQuoteCategory });
 
-    // Clear input fields after adding
+    // Clear input fields
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
 
@@ -41,3 +34,36 @@ function addQuote() {
     alert("Please enter both a quote and a category!");
   }
 }
+
+// Step 4: Function to dynamically create the Add Quote form
+function createAddQuoteForm() {
+  let formDiv = document.createElement("div");
+
+  // Create input for new quote
+  let quoteInput = document.createElement("input");
+  quoteInput.type = "text";
+  quoteInput.id = "newQuoteText";
+  quoteInput.placeholder = "Enter a new quote";
+
+  // Create input for category
+  let categoryInput = document.createElement("input");
+  categoryInput.type = "text";
+  categoryInput.id = "newQuoteCategory";
+  categoryInput.placeholder = "Enter quote category";
+
+  // Create button
+  let addButton = document.createElement("button");
+  addButton.textContent = "Add Quote";
+  addButton.addEventListener("click", addQuote);
+
+  // Append everything to formDiv
+  formDiv.appendChild(quoteInput);
+  formDiv.appendChild(categoryInput);
+  formDiv.appendChild(addButton);
+
+  // Finally, attach formDiv to body (or another container)
+  document.body.appendChild(formDiv);
+}
+
+// Call the function to create the form when the page loads
+createAddQuoteForm();
