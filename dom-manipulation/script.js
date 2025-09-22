@@ -51,7 +51,6 @@ function showRandomQuote() {
   const quote = pool[randomIndex];
   display.textContent = `"${quote.text}" — [${quote.category}]`;
 
-  // Save to session storage
   saveLastQuote(quote);
 }
 
@@ -122,10 +121,17 @@ function importFromJsonFile(event) {
 loadQuotes();
 populateCategories();
 
-// Try to restore last viewed quote from session storage
+// Restore last viewed quote if available
 const lastQuote = loadLastQuote();
 if (lastQuote) {
   document.getElementById("quoteDisplay").textContent = `"${lastQuote.text}" — [${lastQuote.category}]`;
 } else {
   showRandomQuote();
 }
+
+// ✅ Attach event listeners here
+document.getElementById("newQuote").addEventListener("click", showRandomQuote);
+document.getElementById("categorySelect").addEventListener("change", showRandomQuote);
+document.getElementById("addQuote").addEventListener("click", addQuote);
+document.getElementById("exportBtn").addEventListener("click", exportToJson);
+document.getElementById("importFile").addEventListener("change", importFromJsonFile);

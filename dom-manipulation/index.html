@@ -14,21 +14,21 @@
 
   <!-- Category Selection -->
   <label for="categorySelect">Category:</label>
-  <select id="categorySelect" onchange="showRandomQuote()">
+  <select id="categorySelect">
     <option value="all">All</option>
   </select>
-  <button onclick="showRandomQuote()">Show New Quote</button>
+  <button id="newQuote">Show New Quote</button>
   <br><br>
 
   <!-- Add Quote Form -->
   <input id="newQuoteText" type="text" placeholder="Enter a new quote">
   <input id="newQuoteCategory" type="text" placeholder="Enter quote category">
-  <button onclick="addQuote()">Add Quote</button>
+  <button id="addQuote">Add Quote</button>
   <br><br>
 
   <!-- Import / Export -->
-  <button onclick="exportToJson()">Export Quotes</button>
-  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)">
+  <button id="exportBtn">Export Quotes</button>
+  <input type="file" id="importFile" accept=".json">
 
   <script src="script.js"></script>
 </body>
